@@ -713,6 +713,51 @@
     .confirm-actions button + button { border-left: 1px solid rgba(235, 199, 125, .18); background: rgba(135, 57, 40, .42); color: #fff0d1; }
     .confirm-actions button:hover { background: rgba(255,255,255,.06); }
 
+    /* Major branches pause briefly so the save decision feels like part of the story. */
+    #majorSavePromptDialog {
+      width: min(456px, calc(100vw - 32px)); overflow: hidden; border-color: rgba(241, 195, 110, .66);
+      border-radius: 5px; background: linear-gradient(145deg, #24191c 0%, #171116 68%, #201417 100%);
+      transform-origin: 50% 46%; box-shadow: 0 28px 92px rgba(0, 0, 0, .76), 0 0 0 1px rgba(247, 214, 146, .07) inset;
+    }
+    #majorSavePromptDialog .confirm-body { position: relative; padding: 31px 30px 28px; }
+    #majorSavePromptDialog .confirm-body::before {
+      content: ""; display: block; width: 42px; height: 2px; margin-bottom: 14px;
+      background: linear-gradient(90deg, rgba(242, 201, 119, .95), rgba(242, 201, 119, 0));
+    }
+    #majorSavePromptDialog .confirm-body h2 { letter-spacing: .08em; }
+    #majorSavePromptDialog .confirm-actions button {
+      position: relative; min-height: 52px; transition: background .2s ease, color .2s ease, transform .2s ease;
+    }
+    #majorSavePromptDialog .confirm-actions button:hover { transform: translateY(-1px); }
+    #majorSavePromptDialog .confirm-actions button:focus-visible { outline: 2px solid rgba(255, 222, 145, .92); outline-offset: -4px; }
+    #majorSavePromptDialog[open] { animation: major-save-prompt-enter .34s cubic-bezier(.2, .76, .22, 1) both; }
+    #majorSavePromptDialog[open]::backdrop { animation: major-save-backdrop-enter .3s ease-out both; }
+    #majorSavePromptDialog[open]:not(.is-leaving) .confirm-body h2 { animation: major-save-content-enter .3s .07s both; }
+    #majorSavePromptDialog[open]:not(.is-leaving) .confirm-body p { animation: major-save-content-enter .32s .12s both; }
+    #majorSavePromptDialog[open]:not(.is-leaving) .confirm-actions button:first-child { animation: major-save-action-enter .28s .16s both; }
+    #majorSavePromptDialog[open]:not(.is-leaving) .confirm-actions button:last-child { animation: major-save-action-enter .3s .21s both; }
+    #majorSavePromptDialog.is-leaving { pointer-events: none; animation: major-save-prompt-leave .22s cubic-bezier(.4, 0, 1, 1) both; }
+    #majorSavePromptDialog.is-leaving::backdrop { animation: major-save-backdrop-leave .22s ease-in both; }
+    @keyframes major-save-prompt-enter {
+      from { opacity: 0; transform: translateY(18px) scale(.965); filter: blur(2px); }
+      to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+    }
+    @keyframes major-save-prompt-leave {
+      from { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+      to { opacity: 0; transform: translateY(8px) scale(.985); filter: blur(1px); }
+    }
+    @keyframes major-save-backdrop-enter { from { background: rgba(5, 4, 7, 0); backdrop-filter: blur(0); } to { background: rgba(5, 4, 7, .72); backdrop-filter: blur(5px); } }
+    @keyframes major-save-backdrop-leave { from { background: rgba(5, 4, 7, .72); backdrop-filter: blur(5px); } to { background: rgba(5, 4, 7, 0); backdrop-filter: blur(0); } }
+    @keyframes major-save-content-enter { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes major-save-action-enter { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    @media (prefers-reduced-motion: reduce) {
+      #majorSavePromptDialog[open], #majorSavePromptDialog.is-leaving,
+      #majorSavePromptDialog[open]::backdrop, #majorSavePromptDialog.is-leaving::backdrop,
+      #majorSavePromptDialog[open]:not(.is-leaving) .confirm-body h2,
+      #majorSavePromptDialog[open]:not(.is-leaving) .confirm-body p,
+      #majorSavePromptDialog[open]:not(.is-leaving) .confirm-actions button { animation: none; }
+    }
+
     @media (max-width: 760px) {
       .game { min-height: 460px; }
       .topbar { height: 62px; padding-left: 14px; padding-right: 14px; }
@@ -1364,6 +1409,55 @@
     }
     .system-toast.show { animation: systemToast var(--toast-duration, 2.1s) var(--ease-settle) both; }
     @keyframes systemToast { 12%, 78% { opacity: 1; transform: translate(-50%, 0); } 100% { opacity: 0; transform: translate(-50%, -5px); } }
+
+    .character-intro-panel {
+      position: absolute;
+      z-index: 225;
+      top: calc(var(--safe-top) + 66px);
+      right: clamp(12px, 2.4vw, 36px);
+      width: min(300px, calc(100vw - 32px));
+      padding: 13px 15px 14px;
+      overflow: hidden;
+      border: 1px solid rgba(225, 195, 126, .38);
+      border-radius: 4px;
+      background: linear-gradient(118deg, rgba(26, 18, 20, .96), rgba(18, 22, 29, .94));
+      box-shadow: 0 18px 46px rgba(2, 4, 9, .48), inset 0 1px rgba(255, 239, 197, .07);
+      color: #f0e5d0;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    .character-intro-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 3px;
+      background: #c89a4a;
+    }
+    .character-intro-panel.is-visible { animation: characterIntroFloat 6s var(--ease-settle) both; }
+    .character-intro-kicker { margin: 0 0 7px; color: #e3c06c; font: 700 10px/1 "Microsoft YaHei", sans-serif; letter-spacing: 0; }
+    .character-intro-name { margin: 0; color: #f4e5c9; font: 800 24px/1.1 "STKaiti", "KaiTi", serif; letter-spacing: 0; }
+    .character-intro-role { margin: 6px 0 0; color: rgba(240, 218, 173, .8); font: 700 12px/1.45 "Microsoft YaHei", sans-serif; }
+    .character-intro-description { margin: 8px 0 0; color: rgba(231, 219, 198, .77); font-size: 12px; line-height: 1.65; overflow-wrap: anywhere; }
+    @keyframes characterIntroFloat {
+      0% { opacity: 0; transform: translateY(-10px); }
+      8%, 82% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-5px); }
+    }
+
+    @media (max-width: 760px) {
+      .character-intro-panel {
+        top: calc(var(--safe-top) + 68px);
+        right: 12px;
+        width: min(264px, calc(100vw - 24px));
+        padding: 11px 13px 12px;
+      }
+      .character-intro-name { font-size: 21px; }
+      .character-intro-description { font-size: 11px; line-height: 1.55; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .character-intro-panel.is-visible { animation: none; opacity: 1; transform: none; }
+    }
 
     dialog.game-menu-dialog,
     dialog.history-dialog {
@@ -3159,6 +3253,13 @@
     <div class="flash" id="flash"></div>
     <div class="bond-toast" id="bondToast" role="status" aria-live="polite"></div>
     <div class="system-toast" id="systemToast" role="status" aria-live="polite"></div>
+    <aside class="character-intro-panel" id="characterIntroPanel" role="status" aria-live="polite" aria-atomic="true" hidden>
+      <p class="character-intro-kicker">人物档案已解锁</p>
+      <h2 class="character-intro-name" id="characterIntroName"></h2>
+      <p class="character-intro-role" id="characterIntroRole"></p>
+      <p class="character-intro-description" id="characterIntroDescription"></p>
+    </aside>
+
     <div class="transition-overlay" id="transitionOverlay" aria-hidden="true"></div>
 
     <section class="ending" id="ending" data-kind="fish" hidden aria-label="结局画面">
@@ -3383,6 +3484,14 @@
     <div class="confirm-body"><h2>重回序章</h2><p>当前选择印记将被清除，故事会从博物馆熄灯之时重新开始。</p></div>
     <div class="confirm-actions"><button id="cancelRestart" type="button">继续此刻</button><button id="confirmRestart" type="button">重新开始</button></div>
   </dialog>
+  <dialog id="majorSavePromptDialog" aria-labelledby="majorSavePromptTitle">
+    <div class="confirm-body">
+      <h2 id="majorSavePromptTitle">抉择临界</h2>
+      <p id="majorSavePromptText">这项选择会显著改变后续剧情。是否先把此刻刻入陶印？</p>
+    </div>
+    <div class="confirm-actions"><button id="majorSaveContinue" type="button">不保存，继续</button><button id="majorSaveOpen" type="button">前往存档</button></div>
+  </dialog>
+
 
   <dialog class="game-menu-dialog" id="gameMenuDialog" aria-labelledby="gameMenuTitle">
     <div class="menu-shell">
@@ -15775,7 +15884,7 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
         "scene": "kunpeng",
         "speaker": "纹中之声",
         "text": "这不是神明直接开口。馆长借彩陶结社留在展览设备里的纹魂记录回应你：它不能替历史选择胜者，却能让你看见被胜者遗忘的人。先记住他们怎样活着，再去问澜为何发动战争。",
-        "next": "worldGuide0"
+        "next": "pdf14WorldBeastsPeopleIntroV1"
       },
       {
         "id": "kunpengObserveAnswer",
@@ -15783,7 +15892,33 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
         "scene": "kunpeng",
         "speaker": "纹中之声",
         "text": "雪花屏里传来馆长预先留下的结社记录，不是神明的声音：旁观也是一种选择。可当你认得他们的火、泥土与骨器，便再也无法声称自己什么都没看见。",
-        "next": "worldGuide0"
+        "next": "pdf14WorldBeastsPeopleIntroV1"
+      },
+      {
+        "id": "pdf14WorldBeastsPeopleIntroV1",
+        "part": 0,
+        "scene": "world",
+        "chapter": "远古导览 · 兽与人",
+        "card": [
+          "ARCHAIC WORLD",
+          "兽与人",
+          "先辨认共同生活在谷地里的生命，再阅读部族的日常"
+        ],
+        "speaker": "历史之眼",
+        "text": "纹魂没有立刻把你带到战争。它先把谷地铺开：粗麻短衣、兽皮围裙和赭石纹的人群围着火与陶罐劳作；弓、骨矛、骨簪与石器被放在触手可及处。更远的山脊上，夔牛、猼訑、瞿如、毕方、鹿群与普通鸟兽各自留下踪迹。画面仍是待补充的导览占位，但每一道观察印记都可以被你收入背包。",
+        "next": "worldGuide0",
+        "inspect": "pdf14BeastsPeopleSurveyV1",
+        "gain": {
+          "sceneFlags": ["pdf14BeastsPeopleIntroducedV1"],
+          "journal": [
+            {
+              "id": "pdf14BeastsPeopleIntroLogV1",
+              "kind": "archive",
+              "title": "兽与人 · 导览开启",
+              "text": "异兽、人群与早期工具的观察记录已经出现；请逐一完成七处观察。"
+            }
+          ]
+        }
       },
       {
         "id": "pdf8WorldGuideIntro",
@@ -15797,7 +15932,7 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
         ],
         "speaker": "历史之眼",
         "text": "谷地并不只有鱼与鸟。鸟部族占据高地祭台，鱼部族依河而居，粟部族掌握粮田与南坡通道；月部族在两边观望，花部族收容伤者，蝉部族居于北面窄沟。六部族的地图与档案已经写入掌故，可随时查看。",
-        "next": "pdf8WorldWarFirst",
+        "next": "pdf14FirstWarStrikeV1",
         "gain": {
           "sceneFlags": ["pdf8SixTribesIntroduced"],
           "journal": [
@@ -15811,12 +15946,20 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
         }
       },
       {
+        "id": "pdf14FirstWarStrikeV1",
+        "part": 0,
+        "scene": "river",
+        "speaker": "历史之眼",
+        "text": "【第一次战争 · 河滩夜袭】深夜，鱼部族收起火把，贴着河水的反光潜行。湿沙吞没脚步，芦苇替他们遮住身体；高地上的鸟部守卫只当那阵细响是风拨水草。",
+        "next": "pdf8WorldWarFirst"
+      },
+      {
         "id": "pdf8WorldWarFirst",
         "part": 0,
         "scene": "river",
         "speaker": "历史之眼",
-        "text": "【第一次战争：河滩夜袭】鱼部族不点火把，沿河滩无声逼近鸟部族营地。打盹的守卫听见水声时，石刀已经落下；翻倒的火把点燃干草，鱼部族借混乱夺得第一次胜利。",
-        "next": "pdf8WorldWarSecond",
+        "text": "守卫终于惊醒，先听见水声，才看见石刀在夜里一闪。搏斗撞翻火把，火星落进晒干的草束，营地边缘立刻烧出一条刺眼的缝。鱼部族借着火影与混乱切开防线。",
+        "next": "pdf14FirstWarOutcomeV1",
         "gain": {
           "evidence": ["firstWarMark"],
           "sceneFlags": ["pdf8FirstWarReviewed"],
@@ -15831,12 +15974,28 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
         }
       },
       {
+        "id": "pdf14FirstWarOutcomeV1",
+        "part": 0,
+        "scene": "river",
+        "speaker": "历史之眼",
+        "text": "黎明前，第一次战争由鱼部族取胜。鸟部族失去高地祭台与部分召集权，河滩夜袭也让谷地记住：守备一旦被撕开，火与水都能成为进攻的同谋。",
+        "next": "pdf14SecondWarAssaultV1"
+      },
+      {
+        "id": "pdf14SecondWarAssaultV1",
+        "part": 0,
+        "scene": "world",
+        "speaker": "历史之眼",
+        "text": "【第二次战争 · 高地反攻】冬夜里，鸟部族先放出驯鹰。鹰在风里辨认鱼部营地的火点与出入口，随后落回公屋的木杆。黎明来临前，战士已经分成潜入低地与驻守高坡的两队。",
+        "next": "pdf8WorldWarSecond"
+      },
+      {
         "id": "pdf8WorldWarSecond",
         "part": 0,
         "scene": "world",
         "speaker": "历史之眼",
-        "text": "【第二次战争：高地反攻】鸟部族借鹰侦察鱼部营地，一半战士潜入低地，一半留在高坡射箭投石。鸟部族夺回祭台与诸部召集权；澜的父亲死于突袭，九岁的姬被俘。两次战事留下的胜负与亲族伤痕，从此成为澜与姬无法摆脱的过去。",
-        "next": "lanNight0",
+        "text": "一半鸟部战士沿低地突入营寨，另一半从高坡射箭、投石，封住河滩回援。鹰的尖鸣越过木杆时，鱼部族的阵线已经断开；澜的父亲死于突袭，九岁的姬在混乱中被鸟部族带走。",
+        "next": "pdf14SecondWarOutcomeV1",
         "gain": {
           "evidence": ["secondWarMark"],
           "sceneFlags": ["pdf8SecondWarReviewed", "pdf8WarArchivesReviewed"],
@@ -15850,6 +16009,14 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
             }
           ]
         }
+      },
+      {
+        "id": "pdf14SecondWarOutcomeV1",
+        "part": 0,
+        "scene": "world",
+        "speaker": "历史之眼",
+        "text": "鸟部族夺回祭台与诸部召集权，鱼部族退回河滩。澜与姬从此被两场胜负拆开：一个带着父亲之死回到鱼部，一个作为战俘在鸟部族长大。十年后，陶窑的余火仍在替他们保留这道旧伤。",
+        "next": "lanNight0"
       },
       {
         "id": "worldGuide0",
@@ -15950,6 +16117,7 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
           "在夜色与余火之间，祭司第一次看见了你"
         ],
         "speaker": "旁白",
+        "unlockCharacters": ["澜"],
         "text": "夜深人静，万籁俱寂。鱼部族的祭司澜站在一片暗影里，眼望着窑膛中隐约的余火。火星映在他的鱼纹印记上，像一枚尚未落定的战令。",
         "portraits": {
           "lan": "cool"
@@ -16063,7 +16231,7 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
         "part": 1,
         "scene": "kiln",
         "speaker": "旁白",
-        "text": "你闭眼深吸冷风，终于确认自己正占据澜的身体。鱼部族祭司，二十四岁；心思深沉、野心勃勃。从成为祭司继承人的那一天起，他就立志攻占鸟部族。",
+        "text": "你闭眼深吸冷风，终于确认意识正借澜的身体停在陶窑里。窑门外风声带着湿泥与烟尘，你还来不及理清他的记忆，就听见有人掀开了草帘。",
         "portraits": {
           "lan": "cool"
         },
@@ -16087,7 +16255,7 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
         "part": 1,
         "scene": "kiln",
         "speaker": "旁白",
-        "text": "姬走进陶窑。十九岁，九岁时被鸟部族俘获；沉默寡言、性格孤僻，负责看守陶窑、打杂，农耕时还要做最重的苦力。你无法控制澜的行动，只能看着他把手中的陶罐递过去。",
+        "text": "姬停在窑火照不到的地方，目光越过白灰与细沙，落到澜手中的小陶罐上。你无法控制这具身体，只能看着澜把陶罐递过去。",
         "portraits": {
           "lan": "cool",
           "ji": "guarded"
@@ -16554,6 +16722,7 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
         "part": 2,
         "scene": "kiln",
         "speaker": "旁白",
+        "unlockCharacters": ["葭"],
         "text": "大典前一周，鸟部族仍按旧日节律生活。孩子踩软泥，老人筛去砂砾，葭把盘筑好的陶坯一只只送进窑室。",
         "portraits": {
           "jia": "normal"
@@ -17942,7 +18111,8 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
         "part": 4,
         "scene": "camp-jia",
         "speaker": "旁白",
-        "text": "你在花部族的晨雾里重新醒来。上一具身体已经在老榆树下因伤口感染死去；眼前是一间窄小偏棚，手掌换成没有重茧、只留木刺浅痕的陌生双手。新的名字是坞：花部族十八岁的普通族人。",
+        "unlockCharacters": ["坞"],
+        "text": "你在花部族的晨雾里重新醒来。上一具身体已经在老榆树下因伤口感染死去；眼前是一间窄小偏棚，掌心换成没有重茧、只留木刺浅痕的陌生双手。新的名字正在意识深处慢慢浮现。",
         "portraits": {
           "jia": "sad"
         },
@@ -18427,6 +18597,7 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
       { id: "fragmentLightGirlFirstEcho", characterId: "lightgirl", title: "迟到的相认", text: "玻璃倒影中的少女先认出了玩家。她没有说出名字，只确认这场跨越千年的相见并非第一次。", sourceNode: "m03", sourceHotspot: null, unlockCondition: null },
       { id: "fragmentChildrenOldFriendQuestion", characterId: "children", title: "旧友之问", text: "孩子从鸟身鱼尾的旧神话里听出两族曾经并肩生活，也问出了成年人不愿再回答的问题。", sourceNode: "daily3", sourceHotspot: null, unlockCondition: null },
       { id: "fragmentLingMeasuredAlliance", characterId: "ling", title: "量过的盟约", text: "棂把南坡通道、守田借口与肥沃耕地写进同一笔交换。她提出的不是援助，而是一场已量好代价的联盟。", sourceNode: "lr00", sourceHotspot: null, unlockCondition: null },
+      { id: "fragmentWuAshBottle", characterId: "wu", title: "陌生身体的陶瓶", text: "坞醒来时，葭的骨灰小陶瓶已经留在膝边。普通人的双手被卷进历史，也因此有机会把失去的东西交还给她。", sourceNode: "solWuAwakening", sourceHotspot: null, unlockCondition: null },
       { id: "fragmentCrowdDemandProof", characterId: "crowd", title: "恐惧要求证据", text: "神谕一旦被公开，诸部众人的第一反应不是相信或否认，而是要求一个足以承担战争后果的来源。", sourceNode: "pubSource", sourceHotspot: null, unlockCondition: null },
       { id: "fragmentLanTenYearPlan", characterId: "lan", title: "澜的十年筹谋", text: "从被选为祭司继承人起，澜便把夺回高地、救出姬与推翻鸟部族首领地位写进同一场复仇。", sourceNode: "lanAwake", sourceHotspot: null, unlockCondition: { visitedScenes: ["kilnSurvey"] } },
       { id: "fragmentJiBoneToken", characterId: "ji", title: "姬的骨饰", text: "半枚鱼纹骨牌在战俘生涯中被磨得发亮，断口与澜保存的旧牌严丝合缝。", sourceNode: null, sourceHotspot: "jiBoneOrnamentHotspot", unlockCondition: { evidence: ["jiBoneToken"] } },
@@ -18572,7 +18743,7 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
         "name": "刻纹骨锥",
         "description": "以兽骨磨尖的制陶工具，能在半干泥胎上刻出连续的鱼鳞与鸟羽纹。",
         "icon": "锥",
-        "sourceScene": "远古世界导览",
+        "sourceScene": "兽与人导览",
         "once": true
       },
       {
@@ -18580,7 +18751,7 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
         "name": "猎用骨刀",
         "description": "鹿骨磨成的短刀，可切割筋皮，也是在山道遭遇野兽时的贴身防具。",
         "icon": "刀",
-        "sourceScene": "远古世界导览",
+        "sourceScene": "兽与人导览",
         "once": true
       },
       {
@@ -18588,7 +18759,7 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
         "name": "筑屋石斧",
         "description": "打磨过的石斧装在硬木柄上，用于削梁、清根与修筑半地穴房屋。",
         "icon": "斧",
-        "sourceScene": "远古世界导览",
+        "sourceScene": "兽与人导览",
         "once": true
       },
       {
@@ -18596,7 +18767,7 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
         "name": "祭火骨笛",
         "description": "中空鸟骨制成的短笛，音色高而悠远，用来在礼祭中模仿毕方长鸣。",
         "icon": "笛",
-        "sourceScene": "远古世界导览",
+        "sourceScene": "远古世界日常",
         "once": true
       },
       {
@@ -18604,7 +18775,63 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
         "name": "裂纹龟甲",
         "description": "裂缝分别指向骨矛与洪水纹，用来复核两种神谕。",
         "icon": "甲",
-        "sourceScene": "神谕回廊",
+        "sourceScene": "远古世界日常",
+        "once": true
+      },
+      {
+        "id": "pdf14KuiniuRecordV1",
+        "name": "夔牛观察片",
+        "description": "记录独足夔牛踏过湿石时传到谷地的低沉震动。",
+        "icon": "夔",
+        "sourceScene": "兽与人导览",
+        "once": true
+      },
+      {
+        "id": "pdf14BoyangRecordV1",
+        "name": "猼訑观察片",
+        "description": "记录九尾猼訑越过坡地后留下的草叶压痕。",
+        "icon": "猼",
+        "sourceScene": "兽与人导览",
+        "once": true
+      },
+      {
+        "id": "pdf14QuruRecordV1",
+        "name": "瞿如观察片",
+        "description": "记录瞿如的鸣声与雾中掠过水边的鸟翼。",
+        "icon": "瞿",
+        "sourceScene": "兽与人导览",
+        "once": true
+      },
+      {
+        "id": "pdf14BifangRecordV1",
+        "name": "毕方观察片",
+        "description": "记录毕方落在祭火外侧时，火焰被压低的瞬间。",
+        "icon": "毕",
+        "sourceScene": "兽与人导览",
+        "once": true
+      },
+      {
+        "id": "pdf14DeerHerdRecordV1",
+        "name": "鹿群观察片",
+        "description": "记录鹿蹄踩出的旧道、水源与围猎边界。",
+        "icon": "鹿",
+        "sourceScene": "兽与人导览",
+        "once": true
+      },
+      {
+        "id": "pdf14CommonFaunaRecordV1",
+        "name": "鸟兽观察片",
+        "description": "记录谷地普通鸟兽怎样先于人群感知季节变化。",
+        "icon": "兽",
+        "sourceScene": "兽与人导览",
+        "once": true
+      },
+      {
+        "id": "pdf14EarlyPeopleRecordV1",
+        "name": "人群生活记录",
+        "description": "记录粗麻短衣、兽皮围裙、赭石纹与早期工具的使用方式；人物视觉待补充。",
+        "icon": "人",
+        "sourceScene": "兽与人导览",
         "once": true
       },
       {
@@ -18986,16 +19213,16 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
       {
         "id": "firstWarMark",
         "name": "第一次战争印记",
-        "description": "鱼部族夜袭高地，鸟部族失守；澜之父战死，姬被俘。",
+        "description": "鱼部族不点火把沿河滩潜入，石刀、翻倒火把与干草引燃夜袭；鸟部族在第一次战争中失守。",
         "category": "战争回溯",
-        "endingUse": "解释澜十年复仇与兄弟失散。"
+        "endingUse": "解释河滩夜袭为何成为后续守备、火把与南坡封锁的历史参照。"
       },
       {
         "id": "secondWarMark",
         "name": "第二次战争印记",
-        "description": "鸟部族借鹰侦察，从高地反攻并夺回祭台。",
+        "description": "鸟部族借鹰侦察后分兵潜入低地与驻守高坡，以箭石封住回援，夺回祭台；澜之父战死，九岁的姬被俘。",
         "category": "战争回溯",
-        "endingUse": "解释两族对高地、祭台与先手情报的执念。"
+        "endingUse": "解释澜十年谋局、姬的战俘身份，以及两族对高地、祭台与先手情报的执念。"
       },
       {
         "id": "flowerBottleReturn",
@@ -19038,7 +19265,7 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
       document: "文书", map: "地图", seal: "陶印", soul: "纹魂", vessel: "器物",
       material: "材料", token: "信物", craft: "制陶印记", omen: "神谕物", ritual: "祭仪物",
       tool: "工具", instrument: "乐器",
-      weapon: "兵器", relic: "历史遗物"
+      weapon: "兵器", archive: "观察记录", relic: "历史遗物"
     };
     const ITEM_METADATA = {
       invitation: { type: "document", evidenceId: "invitationCipher" },
@@ -19059,6 +19286,13 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
       stoneAxe: { type: "tool" },
       boneFlute: { type: "instrument" },
       tortoiseShell: { type: "omen", evidenceId: "omenConfirmed" },
+      pdf14KuiniuRecordV1: { type: "archive" },
+      pdf14BoyangRecordV1: { type: "archive" },
+      pdf14QuruRecordV1: { type: "archive" },
+      pdf14BifangRecordV1: { type: "archive" },
+      pdf14DeerHerdRecordV1: { type: "archive" },
+      pdf14CommonFaunaRecordV1: { type: "archive" },
+      pdf14EarlyPeopleRecordV1: { type: "archive" },
       dryGrassBasin: { type: "ritual", evidenceId: "fireBasinRecord" },
       ceremonialBasin: { type: "ritual" },
       crackedBasin: { type: "relic", evidenceId: "crackedBasinRecord" },
@@ -19252,10 +19486,109 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
         ]
       },
       {
+        "id": "pdf14BeastsPeopleSurveyV1",
+        "title": "兽与人",
+        "locationId": "mountains-and-valley",
+        "prompt": "现有远古导览景观暂作为世界观视觉占位。请调查七处生命印记，完成后取得三件早期工具与对应能力。",
+        "required": [
+          "pdf14KuiniuHotspotV1",
+          "pdf14BoyangHotspotV1",
+          "pdf14QuruHotspotV1",
+          "pdf14BifangHotspotV1",
+          "pdf14DeerHerdHotspotV1",
+          "pdf14CommonFaunaHotspotV1",
+          "pdf14EarlyPeopleHotspotV1"
+        ],
+        "completionGain": {
+          "items": [
+            "boneAwl",
+            "boneKnife",
+            "stoneAxe"
+          ],
+          "abilities": {
+            "soul": 1,
+            "historyEye": 1,
+            "force": 30
+          },
+          "sceneFlags": [
+            "pdf14BeastsPeopleSurveyCompleteV1"
+          ],
+          "endingFlags": [
+            "pdf14BeastsPeopleRecoveredV1"
+          ],
+          "journal": [
+            {
+              "id": "pdf14BeastsPeopleCompleteLogV1",
+              "kind": "archive",
+              "title": "兽与人 · 观察完成",
+              "text": "夔牛、猼訑、瞿如、毕方、鹿群、普通鸟兽与人群生活记录已经齐备；骨锥、骨刀、石斧与对应能力已写入当前周目。"
+            }
+          ]
+        },
+        "hotspots": [
+          {
+            "id": "pdf14KuiniuHotspotV1",
+            "label": "夔牛",
+            "description": "独足夔牛踏过湿石，低沉震动顺着山脊传到谷地。人们不追逐它，只把雷声视为风雨将临的提醒。",
+            "position": { "x": 15, "y": 27, "mobileX": 16, "mobileY": 25 },
+            "gain": { "items": ["pdf14KuiniuRecordV1"], "sceneFlags": ["pdf14KuiniuObservedV1"] },
+            "once": true
+          },
+          {
+            "id": "pdf14BoyangHotspotV1",
+            "label": "猼訑",
+            "description": "九尾猼訑掠过坡顶，草叶被压成弧线。猎手绕开它的领地，孩子只在篝火边听它的传说。",
+            "position": { "x": 72, "y": 24, "mobileX": 71, "mobileY": 23 },
+            "gain": { "items": ["pdf14BoyangRecordV1"], "sceneFlags": ["pdf14BoyangObservedV1"] },
+            "once": true
+          },
+          {
+            "id": "pdf14QuruHotspotV1",
+            "label": "瞿如",
+            "description": "瞿如的鸣声先于身影抵达水边。雾中的鸟翼提示采集者潮气与风向，也提醒祭司迁徙并非只属于人。",
+            "position": { "x": 83, "y": 49, "mobileX": 82, "mobileY": 45 },
+            "gain": { "items": ["pdf14QuruRecordV1"], "sceneFlags": ["pdf14QuruObservedV1"] },
+            "once": true
+          },
+          {
+            "id": "pdf14BifangHotspotV1",
+            "label": "毕方",
+            "description": "独足毕方落在祭火之外，火焰像被无形的手压低。部族以骨笛回应长鸣，试着让火留在陶盆与灶坑中。",
+            "position": { "x": 52, "y": 26, "mobileX": 53, "mobileY": 25 },
+            "gain": { "items": ["pdf14BifangRecordV1"], "sceneFlags": ["pdf14BifangObservedV1"] },
+            "once": true
+          },
+          {
+            "id": "pdf14DeerHerdHotspotV1",
+            "label": "鹿群",
+            "description": "鹿蹄踩出的旧道串起水源与山口。人们沿路设围，也知道不能在同一处耗尽猎物。",
+            "position": { "x": 24, "y": 64, "mobileX": 23, "mobileY": 61 },
+            "gain": { "items": ["pdf14DeerHerdRecordV1"], "sceneFlags": ["pdf14DeerHerdObservedV1"] },
+            "once": true
+          },
+          {
+            "id": "pdf14CommonFaunaHotspotV1",
+            "label": "普通鸟兽",
+            "description": "麻雀啄食落谷，水鸟沿浅滩觅鱼，小兽钻进芦苇。它们不被写进神话，却总能先一步告诉人们季节怎样变化。",
+            "position": { "x": 75, "y": 68, "mobileX": 75, "mobileY": 63 },
+            "gain": { "items": ["pdf14CommonFaunaRecordV1"], "sceneFlags": ["pdf14CommonFaunaObservedV1"] },
+            "once": true
+          },
+          {
+            "id": "pdf14EarlyPeopleHotspotV1",
+            "label": "人",
+            "description": "粗麻短衣、兽皮围裙和赭石纹沾着泥与烟。有人修补弓弦，有人磨骨矛，有人抱着陶罐给归来的猎手递水；人物视觉待补充。",
+            "position": { "x": 47, "y": 52, "mobileX": 47, "mobileY": 49 },
+            "gain": { "items": ["pdf14EarlyPeopleRecordV1"], "sceneFlags": ["pdf14EarlyPeopleObservedV1"] },
+            "once": true
+          }
+        ]
+      },
+      {
         "id": "ancientLifeGuide",
         "title": "远古世界日常",
         "locationId": "mountains-and-valley",
-        "prompt": "触碰六处生活印记；每次调查都会打开一段独立回溯，并把所得器物刻入背包。",
+        "prompt": "触碰六处生活印记；每次调查都会打开独立回溯。完成六项日常后，祭火骨笛与裂纹龟甲将一并刻入背包。",
         "required": [
           "ancientHuntHotspot",
           "ancientRitualHotspot",
@@ -19265,6 +19598,14 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
           "ancientFishingHotspot"
         ],
         "completionGain": {
+          "items": [
+            "boneFlute",
+            "tortoiseShell"
+          ],
+          "abilities": {
+            "historyEye": 1,
+            "divination": 1
+          },
           "sceneFlags": [
             "ancientWorldSurveyed"
           ],
@@ -19309,9 +19650,6 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
             },
             "next": "worldDailyRitual",
             "gain": {
-              "items": [
-                "boneFlute"
-              ],
               "abilities": {
                 "soul": 1
               },
@@ -19403,9 +19741,6 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
             },
             "next": "worldDailyFishing",
             "gain": {
-              "items": [
-                "tortoiseShell"
-              ],
               "abilities": {
                 "divination": 1
               },
@@ -20405,7 +20740,7 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
           "鸟部族夜间守卫",
           "高地祭台守军"
         ],
-        "description": "鱼部族不点火把，从河滩方向潜近。守卫回头时石刀已经落下，倒下的身体打翻火把并点燃干草，混战在火影里爆发。",
+        "description": "鱼部族不点火把，从河滩方向贴水潜近。打盹的守卫先听见水声，才看见石刀；搏斗撞翻火把，火星点燃干草，混战在火影里爆发。",
         "result": "第一次战争由鱼部族获胜，鸟部族失去高地祭台与部分召集权。",
         "explanation": "河滩夜袭证明先手足以改写战果，也让南坡通道与夜间守备成为后来盟约的核心。"
       },
@@ -20420,7 +20755,7 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
           "澜的父亲",
           "九岁的澜与姬"
         ],
-        "description": "鸟部族一半战士潜入低地，一半留在高坡射箭投石。鹰落回公屋木杆时，鱼部族营地已被突入，澜的父亲遇害，姬被俘。",
+        "description": "冬夜，驯鹰先辨认鱼部营地的火点与出入口，再落回公屋木杆。黎明时鸟部族一半战士潜入低地，一半留在高坡射箭投石；鱼部营地被突入，澜的父亲遇害，姬被俘。",
         "result": "第二次战争由鸟部族获胜；祭台与召集权被夺回，鱼部族退回河滩，澜与姬从此失散。",
         "explanation": "鹰侦察带来的先手解释了棂为何要求封死南坡，也解释了澜十年谋局与姬的战俘身份。"
       }
@@ -20447,7 +20782,7 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
     const tribeById = new Map(tribeCatalog.map(tribe => [tribe.id, tribe]));
     const warArchiveById = new Map(warArchiveCatalog.map(archive => [archive.id, archive]));
 
-    const STORY_NODE_FIELDS = new Set(["id", "part", "scene", "chapter", "card", "speaker", "text", "next", "nextBy", "nextWhen", "choices", "portraits", "focus", "thought", "flash", "transition", "shake", "gain", "unlockBond", "action", "requires", "inspect"]);
+    const STORY_NODE_FIELDS = new Set(["id", "part", "scene", "chapter", "card", "speaker", "text", "next", "nextBy", "nextWhen", "choices", "portraits", "focus", "thought", "flash", "transition", "shake", "gain", "unlockBond", "unlockCharacters", "action", "requires", "inspect"]);
     const STORY_CHOICE_FIELDS = new Set(["id", "label", "hint", "next", "effects", "flag", "requires", "consume", "gain", "physicalItemIds"]);
 
     function validateStoryData(data, entry = "m00") {
@@ -20537,12 +20872,21 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
       moduleKicker: document.getElementById("moduleKicker"), moduleTitle: document.getElementById("moduleTitle"),
       moduleSummary: document.getElementById("moduleSummary"), moduleSubtabs: document.getElementById("moduleSubtabs"),
       moduleContent: document.getElementById("moduleContent"), moduleRailStatus: document.getElementById("moduleRailStatus"),
-      mobileModuleNav: document.getElementById("mobileModuleNav")
+      mobileModuleNav: document.getElementById("mobileModuleNav"),
+      characterIntroPanel: document.getElementById("characterIntroPanel"), characterIntroName: document.getElementById("characterIntroName"),
+      characterIntroRole: document.getElementById("characterIntroRole"), characterIntroDescription: document.getElementById("characterIntroDescription"),
+      majorSavePromptDialog: document.getElementById("majorSavePromptDialog"), majorSavePromptText: document.getElementById("majorSavePromptText"),
+      majorSaveContinue: document.getElementById("majorSaveContinue"), majorSaveOpen: document.getElementById("majorSaveOpen")
     };
 
     ui.inventoryQuick = document.getElementById("inventoryQuickButton");
 
     const ACTIVE_MODES = new Set(["story", "exploration", "characters", "codex", "profile"]);
+    const MAJOR_SAVE_PROMPT_NODE_IDS = new Set([
+      "lanRequestChoice", "lr01", "jw00", "pubResponse", "pubResponseDream", "pubCounter2", "pubSibling", "bringJi2",
+      "assertDisposition", "whipDisposition", "brotherProofDisposition", "f03", "solFlowerStayChoiceV1",
+      "saveJiaFlower2", "solWuJiaChoice"
+    ]);
     const QUEST_STATUS_VALUES = new Set(["locked", "active", "completed", "failed"]);
     const createQuestState = () => Object.fromEntries(questCatalog.map(quest => [quest.id, {
       status: quest.type === "main" && quest.part === 0 ? "active" : "locked",
@@ -20558,6 +20902,7 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
         scores: { fish: 0, bird: 0, ash: 0 }, relations: characterRelations, characterRelations,
         abilities: { force: 0, historyEye: 0, soul: 0, divination: 0, strategy: 0, wisdom: 0, kindness: 0, prestige: 0, courage: 0, caution: 0, intelligence: 0, plotDoubt: 0 },
         flags: ["PDF8 正式主线"], flagIds: ["pdf8FormalMainline"], bondUnlocks: [], appliedNodes: [], seenStoryNodeIds: [], storyVisitTrackingVersion: 1,
+        characterIntroShownIds: [], majorSavePromptedChoiceKeys: [],
         inventory: [], evidence: [], visitedScenes: [], hotspots: [], visitedHotspots: [], journal: [], sceneFlags: [], itemCounts: {}, claimedPhysicalMarkerIds: [],
         usedItemIds: [], offeredPhysicalEchoIds: [], physicalItemImpactIds: [], physicalEchoReturnNodeId: null,
         activeMode: "story", explorationSession: null, quests: createQuestState(), activeQuestId: null,
@@ -20578,9 +20923,13 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
     let autoTimer = 0;
     let choiceTimer = 0;
     let systemToastTimer = 0;
+    let characterIntroTimer = 0;
+    let pendingMajorSaveChoice = null;
+    let pendingMajorSaveNodeId = null;
+    let majorSavePromptCloseTimer = 0;
     let renderEpoch = 0;
     const memoryStorage = new Map();
-    const STORAGE_VERSION = 10;
+    const STORAGE_VERSION = 11;
     const PROFILE_VERSION = 3;
     const SLOT_PREFIX = "caitao-oath.v1.slot.";
     const PROFILE_KEY = "caitao-oath.v1.profile";
@@ -20588,26 +20937,28 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
 
     const characterCatalog = [
       { speaker: "澜", name: "澜", role: "鱼部族祭司 · 24岁", portrait: "lan", description: "24岁的鱼部族祭司，心思深沉、野心勃勃。从成为祭司继承人的那一天起，他就立志攻占鸟部族；鱼纹与亲情都被他压进同一场谋局。" },
-      { speaker: "葭", name: "葭", role: "鸟部族预备祭司", portrait: "jia", description: "能感知燕子情绪的年轻祭司。温婉之下藏着对神谕、战争与族人命运的敏锐。" },
-      { speaker: "姥姥", name: "姥姥", role: "鸟部族大祭司", portrait: "grandmother", description: "守护旧礼与族群记忆的大祭司。她知道命运不可逃避，仍选择把仪式完成到最后。" },
+      { speaker: "葭", name: "葭", role: "鸟部族下一任祭司 · 女 · 17岁", portrait: "jia", description: "善良聪颖，天赋绝佳。父母双亡后由姥姥抚养长大；她能感知燕群的情绪，也最先听见战争与洪水将至。" },
+      { speaker: "姥姥", name: "姥姥", role: "鸟部族现任祭司 · 年岁无考", portrait: "grandmother", description: "葭唯一的家人，也是鸟部族面对风雨时最后的屏障。她守住旧礼，却不以神意替活人逃避选择。" },
       { speaker: "姬", name: "姬", role: "鱼部族战俘 · 19岁", portrait: "ji", description: "19岁的鱼部族战俘，九岁时被鸟部族俘获。沉默寡言、性格孤僻，负责看守陶窑、打杂与农耕苦力；他也是澜必须隐藏的亲弟弟。" },
       { speaker: "策展人·秦衡", name: "秦衡", role: "现代策展人", portrait: "curator", description: "邀请你参观彩陶展的策展人。他熟悉每一道纹样，也刻意回避结社真正的目的。" },
       { speaker: "馆长", name: "馆长", role: "彩陶结社引路人", portrait: "director", description: "停电后出现在展柜旁的引路人。他相信看见历史的人，再也无法只做旁观者。" },
       { speaker: "光之少女", name: "光之少女", role: "跨越千年的回声", portrait: "lightgirl", description: "在现代展馆的月光中出现的少女。她与远古的葭共享某种无法言明的回声。" },
       { speaker: "孩子", name: "鸟部族孩子", role: "窑火旁的新一代", portrait: "children", description: "围在姥姥身边听神话的少年与少女。他们让战争之外的日常生活仍有可被守护的形状。" },
-      { speaker: "棂", name: "棂", role: "粟部族首领 · 35岁", portrait: "millet", description: "35岁的粟部族女首领。她以封锁南坡交换鸟部族西面的肥沃耕地，衡量土地、通道与盟约，从不把承诺当作慈悲。" },
+      { speaker: "棂", name: "棂", role: "粟部族头领 · 女 · 35岁", portrait: "millet", description: "思虑周全，手段凌厉。前任头领骤然离世后她仓促接位，声望尚未稳固，迫切需要一场胜利来提高威望。" },
+      { speaker: "坞", name: "坞", role: "花部族普通族人 · 18岁", portrait: null, description: "地位不高，平日负责挑水、劈柴、削木棍等杂事。玩家在花部族苏醒后，以这具身体继续守住葭与骨灰小陶瓶。" },
       { speaker: "众人", name: "诸部众人", role: "大典见证者", portrait: null, description: "来自不同部族的见证者与议论者。他们没有单一面孔，却共同决定恐惧会怎样扩散。" }
     ];
     const CHARACTER_METADATA = {
       "澜": { id: "lan", age: "24岁", tribe: "鱼部族", relationshipKey: "lan", impression: "冷静、克制、把亲情藏进谋局" },
-      "葭": { id: "jia", age: "年轻祭司", tribe: "鸟部族", relationshipKey: "jia", impression: "温婉敏锐，能听见燕群的恐惧" },
-      "姥姥": { id: "grandmother", age: "年长者", tribe: "鸟部族", relationshipKey: "grandmother", impression: "守护旧礼，也接受自己注定的火" },
+      "葭": { id: "jia", age: "17岁", tribe: "鸟部族", relationshipKey: "jia", impression: "善良聪颖，能听见燕群的恐惧" },
+      "姥姥": { id: "grandmother", age: "年岁无考", tribe: "鸟部族", relationshipKey: "grandmother", impression: "守护旧礼，也接受自己注定的火" },
       "姬": { id: "ji", age: "19岁", tribe: "鱼部族 / 鸟部族战俘", relationshipKey: "ji", impression: "沉默孤僻，对自由与战争同样恐惧" },
       "策展人·秦衡": { id: "qin", age: "现代", tribe: "彩陶结社", relationshipKey: "qinHeng", impression: "熟悉结社暗号，刻意隐藏展览真正目的" },
       "馆长": { id: "director", age: "现代", tribe: "彩陶结社", relationshipKey: null, impression: "相信看见历史的人不能继续旁观" },
       "光之少女": { id: "lightgirl", age: "现代", tribe: "千年回声", relationshipKey: null, impression: "佩着燕形发饰，等待一场迟到的重逢" },
       "孩子": { id: "children", age: "幼年", tribe: "鸟部族", relationshipKey: null, impression: "让战争之外的日常仍值得守护" },
-      "棂": { id: "ling", age: "35岁", tribe: "粟部族", relationshipKey: "ling", impression: "把土地、通道与盟约算成同一本账" },
+      "棂": { id: "ling", age: "35岁", tribe: "粟部族", relationshipKey: "ling", impression: "以胜利稳住仓促接位后的声望" },
+      "坞": { id: "wu", age: "18岁", tribe: "花部族", relationshipKey: null, impression: "在战后废墟里把寻常杂活做成守护" },
       "众人": { id: "crowd", age: "不详", tribe: "六部", relationshipKey: null, impression: "恐惧在群体中扩散时形成的共同面孔" }
     };
     characterCatalog.forEach(character => Object.assign(character, CHARACTER_METADATA[character.speaker] || { id: character.speaker, age: "不详", tribe: "不详", relationshipKey: null, impression: "尚待调查" }));
@@ -20679,11 +21030,52 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
     }
 
     function unlockCharacter(speaker) {
-      if (!characterBySpeaker.has(speaker) || profile.unlocked.has(speaker)) return;
+      if (!characterBySpeaker.has(speaker) || profile.unlocked.has(speaker)) return false;
       profile.unlocked.add(speaker);
       persistProfile();
       if (ui.menuDialog.open) renderGallery();
       if (!ui.moduleOverlay.hidden && state.activeMode === "characters") renderActiveModule();
+      return true;
+    }
+
+    function clearCharacterIntro() {
+      window.clearTimeout(characterIntroTimer);
+      characterIntroTimer = 0;
+      ui.characterIntroPanel.classList.remove("is-visible");
+      ui.characterIntroPanel.hidden = true;
+    }
+
+    function showCharacterIntro(speaker) {
+      const character = characterBySpeaker.get(speaker);
+      if (!character) return false;
+      window.clearTimeout(characterIntroTimer);
+      ui.characterIntroName.textContent = character.name;
+      ui.characterIntroRole.textContent = character.role;
+      ui.characterIntroDescription.textContent = character.description;
+      ui.characterIntroPanel.hidden = false;
+      ui.characterIntroPanel.classList.remove("is-visible");
+      void ui.characterIntroPanel.offsetWidth;
+      ui.characterIntroPanel.classList.add("is-visible");
+      characterIntroTimer = window.setTimeout(() => {
+        ui.characterIntroPanel.classList.remove("is-visible");
+        ui.characterIntroPanel.hidden = true;
+        characterIntroTimer = 0;
+      }, 6000);
+      return true;
+    }
+
+    function maybeShowCharacterIntro(speaker) {
+      const character = characterBySpeaker.get(speaker);
+      if (!character || !document.body.classList.contains("game-started")) return false;
+      if (state.characterIntroShownIds.includes(character.id)) return false;
+      state.characterIntroShownIds.push(character.id);
+      return showCharacterIntro(speaker);
+    }
+
+    function unlockNodeCharacters(node) {
+      const speakers = [...new Set([...(node?.unlockCharacters || []), node?.speaker].filter(Boolean))];
+      speakers.forEach(unlockCharacter);
+      speakers.forEach(maybeShowCharacterIntro);
     }
 
     function captureStoryState(source = state) {
@@ -20699,6 +21091,8 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
         appliedNodes: [...source.appliedNodes],
         seenStoryNodeIds: [...(source.seenStoryNodeIds || [])],
         storyVisitTrackingVersion: source.storyVisitTrackingVersion === 1 ? 1 : 0,
+        characterIntroShownIds: [...(source.characterIntroShownIds || [])],
+        majorSavePromptedChoiceKeys: [...(source.majorSavePromptedChoiceKeys || [])],
         inventory: [...source.inventory],
         evidence: [...source.evidence],
         visitedScenes: [...source.visitedScenes],
@@ -20934,6 +21328,8 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
       base.appliedNodes = uniqueStrings(raw.appliedNodes).filter(value => nodes.has(value));
       base.seenStoryNodeIds = uniqueStrings([...(raw.seenStoryNodeIds || []), ...(raw.appliedNodes || []), ...(Array.isArray(raw.journal) ? raw.journal : []).map(entry => entry?.nodeId)]).filter(value => nodes.has(value));
       base.storyVisitTrackingVersion = raw.storyVisitTrackingVersion === 1 ? 1 : 0;
+      base.characterIntroShownIds = uniqueStrings(raw.characterIntroShownIds).filter(id => characterById.has(id));
+      base.majorSavePromptedChoiceKeys = uniqueStrings(raw.majorSavePromptedChoiceKeys).filter(id => MAJOR_SAVE_PROMPT_NODE_IDS.has(id));
       base.inventory = uniqueStrings(raw.inventory).filter(value => itemById.has(value));
       base.evidence = uniqueStrings(raw.evidence).filter(value => evidenceById.has(value));
       base.visitedScenes = uniqueStrings(raw.visitedScenes);
@@ -21061,6 +21457,11 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
     function clearPendingTimers() {
       window.clearTimeout(state.timer);
       window.clearTimeout(choiceTimer);
+      window.clearTimeout(majorSavePromptCloseTimer);
+      majorSavePromptCloseTimer = 0;
+      pendingMajorSaveChoice = null;
+      pendingMajorSaveNodeId = null;
+      clearCharacterIntro();
       clearAutoTimer();
       clearExplorationReturnTimer();
       clearExplorationHandoffTimer();
@@ -21078,7 +21479,7 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
     }
 
     function isModalOpen() {
-      return ui.restartDialog.open || ui.menuDialog.open || ui.historyDialog.open || !ui.moduleOverlay.hidden;
+      return ui.restartDialog.open || ui.majorSavePromptDialog.open || ui.menuDialog.open || ui.historyDialog.open || !ui.moduleOverlay.hidden;
     }
 
     function showSystemToast(message, duration = 2200) {
@@ -21180,6 +21581,7 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
         ui.startScreen.classList.remove("is-leaving");
         ui.startScreen.setAttribute("aria-hidden", "true");
         document.body.classList.add("game-started");
+        unlockNodeCharacters(nodes.get(state.current));
         ui.startButton.disabled = false;
         startLeaving = false;
         ui.dialogue.focus({ preventScroll: true });
@@ -21293,6 +21695,11 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
 
     function saveToSlot(slot) {
       if (state.ended) { showSystemToast("结局画面不可存档，请重新开始后再保存"); return; }
+      const acknowledgedMajorSave = pendingMajorSaveNodeId === state.current && MAJOR_SAVE_PROMPT_NODE_IDS.has(state.current);
+      if (acknowledgedMajorSave) {
+        markMajorSavePrompted(state.current);
+        pendingMajorSaveNodeId = null;
+      }
       const payload = {
         version: STORAGE_VERSION,
         savedAt: Date.now(),
@@ -21303,7 +21710,7 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
       const persistent = safeStorageSet(slotKey(slot), JSON.stringify(payload));
       renderSlotLists();
       if (!ui.moduleOverlay.hidden && state.activeMode === "profile") renderActiveModule();
-      showSystemToast(persistent ? `已保存到陶印 ${slot}` : `已保存到陶印 ${slot}，关闭页面后可能失效`);
+      showSystemToast(persistent ? `已保存到陶印 ${slot}${acknowledgedMajorSave ? "，临界抉择已刻入" : ""}` : `已保存到陶印 ${slot}，关闭页面后可能失效`);
     }
 
     function loadFromSlot(slot) {
@@ -24315,7 +24722,7 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
       const session = state.explorationSession;
       const investigation = session ? investigationById.get(session.sceneId) : getNodeInvestigation(node);
       const hotspot = investigation?.hotspots.find(item => item.id === hotspotId);
-      const hardDialogOpen = ui.restartDialog.open || ui.menuDialog.open || ui.historyDialog.open;
+      const hardDialogOpen = ui.restartDialog.open || ui.majorSavePromptDialog.open || ui.menuDialog.open || ui.historyDialog.open;
       if (!hotspot || state.ended || hardDialogOpen) return { ok: false, reason: "热点不在当前场景" };
       if (state.hotspots.includes(hotspotId)) {
         showSystemToast("已调查：" + hotspot.label);
@@ -24529,7 +24936,56 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
       updateAutoUI();
     }
 
-    function choose(choice, originNodeId = state.current) {
+    function markMajorSavePrompted(originNodeId) {
+      if (!MAJOR_SAVE_PROMPT_NODE_IDS.has(originNodeId) || state.majorSavePromptedChoiceKeys.includes(originNodeId)) return false;
+      state.majorSavePromptedChoiceKeys.push(originNodeId);
+      return true;
+    }
+
+    function clearMajorSavePromptTransition() {
+      window.clearTimeout(majorSavePromptCloseTimer);
+      majorSavePromptCloseTimer = 0;
+      const dialog = ui.majorSavePromptDialog;
+      dialog.classList.remove("is-leaving");
+      dialog.removeAttribute("aria-busy");
+      dialog.querySelectorAll("button").forEach(button => { button.disabled = false; });
+    }
+
+    function openMajorSavePrompt() {
+      clearMajorSavePromptTransition();
+      if (!ui.majorSavePromptDialog.open) ui.majorSavePromptDialog.showModal();
+    }
+
+    function closeMajorSavePrompt(afterClose) {
+      const dialog = ui.majorSavePromptDialog;
+      const finish = () => {
+        majorSavePromptCloseTimer = 0;
+        if (dialog.open) dialog.close();
+        clearMajorSavePromptTransition();
+        afterClose?.();
+      };
+      if (!dialog.open) {
+        clearMajorSavePromptTransition();
+        afterClose?.();
+        return;
+      }
+      if (majorSavePromptCloseTimer) return;
+      dialog.classList.add("is-leaving");
+      dialog.setAttribute("aria-busy", "true");
+      dialog.querySelectorAll("button").forEach(button => { button.disabled = true; });
+      const delay = reducedMotionMedia.matches ? 0 : 220;
+      if (!delay) { finish(); return; }
+      majorSavePromptCloseTimer = window.setTimeout(finish, delay);
+    }
+
+    function promptMajorSaveChoice(choice, originNodeId) {
+      pendingMajorSaveChoice = { choice, originNodeId };
+      ui.majorSavePromptText.textContent = "“" + choice.label + "”会显著改变阵营、战争或后续结局。是否先把这个抉择刻入陶印？";
+      openMajorSavePrompt();
+      window.requestAnimationFrame(() => ui.majorSaveContinue.focus({ preventScroll: true }));
+    }
+
+    function choose(choice, originNodeId = state.current, { skipMajorSavePrompt = false } = {}) {
       if (state.current !== originNodeId || state.ended) return false;
       const requirement = checkRequirements(choice.requires);
       if (!requirement.ok) {
@@ -24537,6 +24993,23 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
         renderChoices(nodes.get(state.current).choices || []);
         return false;
       }
+      if (!skipMajorSavePrompt && MAJOR_SAVE_PROMPT_NODE_IDS.has(originNodeId) && !state.majorSavePromptedChoiceKeys.includes(originNodeId)) {
+        promptMajorSaveChoice(choice, originNodeId);
+        return false;
+      }
+      return commitChoice(choice, originNodeId);
+    }
+
+    function commitChoice(choice, originNodeId = state.current) {
+      if (state.current !== originNodeId || state.ended) return false;
+      const requirement = checkRequirements(choice.requires);
+      if (!requirement.ok) {
+        showSystemToast("还缺少关键线索：" + requirement.missing.join("、"));
+        renderChoices(nodes.get(state.current).choices || []);
+        return false;
+      }
+      if (pendingMajorSaveNodeId === originNodeId) pendingMajorSaveNodeId = null;
+      pendingMajorSaveChoice = null;
       checkpoint();
       appendChoiceHistory(choice, originNodeId);
       consumeStoryResources(choice.consume);
@@ -24602,7 +25075,7 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
       updateProgress(state.part);
       if (animate) showChapterCard(node.card); else ui.card.classList.remove("visible");
       setPortraits(node.portraits || {}, node.focus, node);
-      unlockCharacter(node.speaker);
+      unlockNodeCharacters(node);
       if (node.unlockBond) unlockBond(node.unlockBond);
       refreshPermanentUnlocks();
       syncQuestStatuses();
@@ -25068,7 +25541,7 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
         gotoNode(id, options = {}) { if (!nodes.has(id)) throw new Error("未知测试节点：" + id); state.ended = false; ui.ending.hidden = true; showNode(id, { record: false, instant: options.instant !== false, applyGain: options.applyGain !== false, animate: false }); return snapshot(); },
         finishTyping() { finishTyping(); return snapshot(); },
         inspectHotspot(id) { return inspectHotspot(id); },
-        choose(index) { const choice = nodes.get(state.current)?.choices?.[index]; if (!choice) return false; return choose(choice); },
+        choose(index) { const choice = nodes.get(state.current)?.choices?.[index]; if (!choice) return false; return choose(choice, state.current, { skipMajorSavePrompt: true }); },
         visitTribe(id) { return visitTribe(id); },
         save(slot = 1) { saveToSlot(slot); return readSlot(slot); },
         load(slot = 1) { loadFromSlot(slot); return snapshot(); },
@@ -25205,6 +25678,42 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
     });
     ui.cancelRestart.addEventListener("click", () => ui.restartDialog.close());
     ui.confirmRestart.addEventListener("click", restartGame);
+    const abandonMajorSavePrompt = () => {
+      pendingMajorSaveChoice = null;
+      pendingMajorSaveNodeId = null;
+      closeMajorSavePrompt();
+      cancelPendingChoice();
+    };
+    ui.majorSaveContinue.addEventListener("click", () => {
+      if (majorSavePromptCloseTimer) return;
+      const pending = pendingMajorSaveChoice;
+      if (!pending || state.current !== pending.originNodeId || state.ended) {
+        abandonMajorSavePrompt();
+        return;
+      }
+      markMajorSavePrompted(pending.originNodeId);
+      pendingMajorSaveChoice = null;
+      closeMajorSavePrompt(() => commitChoice(pending.choice, pending.originNodeId));
+    });
+    ui.majorSaveOpen.addEventListener("click", () => {
+      if (majorSavePromptCloseTimer) return;
+      const pending = pendingMajorSaveChoice;
+      if (!pending || state.current !== pending.originNodeId || state.ended) {
+        abandonMajorSavePrompt();
+        return;
+      }
+      pendingMajorSaveNodeId = pending.originNodeId;
+      pendingMajorSaveChoice = null;
+      cancelPendingChoice();
+      closeMajorSavePrompt(() => openGameMenu("save"));
+    });
+    ui.majorSavePromptDialog.addEventListener("cancel", event => {
+      event.preventDefault();
+      if (!majorSavePromptCloseTimer) abandonMajorSavePrompt();
+    });
+    ui.majorSavePromptDialog.addEventListener("click", event => {
+      if (event.target === ui.majorSavePromptDialog && !majorSavePromptCloseTimer) abandonMajorSavePrompt();
+    });
     ui.endingContinueWu.addEventListener("click", continueWuLine);
     ui.endingRestart.addEventListener("click", restartGame);
     window.addEventListener("hashchange", () => {
