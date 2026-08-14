@@ -1,0 +1,6 @@
+M-01	ctyh_museum_nfc_01	https://rainbow-bienenstitch-b7627f.netlify.app/nfc/#claim=ctyh_museum_nfc_01
+A-01	ctyh_bone_awl_01	https://rainbow-bienenstitch-b7627f.netlify.app/nfc/#claim=ctyh_bone_awl_01
+A-02	ctyh_stone_axe_01	https://rainbow-bienenstitch-b7627f.netlify.app/nfc/#claim=ctyh_stone_axe_01
+A-03	ctyh_bone_flute_01	https://rainbow-bienenstitch-b7627f.netlify.app/nfc/#claim=ctyh_bone_flute_01
+A-04	ctyh_tortoise_shell_01	https://rainbow-bienenstitch-b7627f.netlify.app/nfc/#claim=ctyh_tortoise_shell_01
+A-05	ctyh_bone_knife_01	https://rainbow-bienenstitch-b7627f.netlify.app/nfc/#claim=ctyh_bone_knife_01

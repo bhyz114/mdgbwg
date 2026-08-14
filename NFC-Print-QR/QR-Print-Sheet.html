@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Painted Pottery Imprints NFC QR Print Sheet</title>
+  <style>
+    @page { size: A4 portrait; margin: 10mm; }
+    * { box-sizing: border-box; }
+    body { margin: 0; color: #15110d; font-family: Arial, sans-serif; }
+    h1 { margin: 0 0 4mm; font-size: 18pt; }
+    p { margin: 0 0 7mm; font-size: 9pt; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; }
+    .card { min-height: 83mm; border: 0.3mm solid #222; display: grid; grid-template-columns: 56mm 1fr; gap: 4mm; padding: 4mm; align-items: center; break-inside: avoid; }
+    img { display: block; width: 56mm; height: 56mm; image-rendering: pixelated; }
+    .meta { min-width: 0; display: grid; gap: 2mm; align-content: center; }
+    strong { font-size: 18pt; }
+    span { font-size: 11pt; font-weight: 700; }
+    code { overflow-wrap: anywhere; font-size: 6.6pt; line-height: 1.35; }
+    @media screen { body { max-width: 210mm; margin: 8mm auto; padding: 0 8mm; } }
+  </style>
+</head>
+<body>
+  <h1>Painted Pottery Imprints - NFC / QR labels</h1>
+  <p>Write or print the exact URL shown on each label. Do not lock a tag until a phone opens the correct claim page.</p>
+  <main class="grid">
+    <section class="card">
+      <img src="M-01-museum-mark.svg" alt="M-01 QR code" />
+      <div class="meta"><strong>M-01</strong><span>Museum Mark</span><code>https://rainbow-bienenstitch-b7627f.netlify.app/nfc/#claim=ctyh_museum_nfc_01</code></div>
+    </section>
+    <section class="card">
+      <img src="A-01-bone-awl.svg" alt="A-01 QR code" />
+      <div class="meta"><strong>A-01</strong><span>Bone Awl</span><code>https://rainbow-bienenstitch-b7627f.netlify.app/nfc/#claim=ctyh_bone_awl_01</code></div>
+    </section>
+    <section class="card">
+      <img src="A-02-stone-axe.svg" alt="A-02 QR code" />
+      <div class="meta"><strong>A-02</strong><span>Stone Axe</span><code>https://rainbow-bienenstitch-b7627f.netlify.app/nfc/#claim=ctyh_stone_axe_01</code></div>
+    </section>
+    <section class="card">
+      <img src="A-03-bone-flute.svg" alt="A-03 QR code" />
+      <div class="meta"><strong>A-03</strong><span>Bone Flute</span><code>https://rainbow-bienenstitch-b7627f.netlify.app/nfc/#claim=ctyh_bone_flute_01</code></div>
+    </section>
+    <section class="card">
+      <img src="A-04-tortoise-shell.svg" alt="A-04 QR code" />
+      <div class="meta"><strong>A-04</strong><span>Tortoise Shell</span><code>https://rainbow-bienenstitch-b7627f.netlify.app/nfc/#claim=ctyh_tortoise_shell_01</code></div>
+    </section>
+    <section class="card">
+      <img src="A-05-bone-knife.svg" alt="A-05 QR code" />
+      <div class="meta"><strong>A-05</strong><span>Bone Knife</span><code>https://rainbow-bienenstitch-b7627f.netlify.app/nfc/#claim=ctyh_bone_knife_01</code></div>
+    </section>
+  </main>
+</body>
+</html>
