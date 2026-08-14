@@ -1,0 +1,23 @@
+{
+  "name": "彩陶印痕：实体印记领取",
+  "short_name": "彩陶 NFC",
+  "description": "彩陶印痕展览游客实体展签领取入口。",
+  "lang": "zh-CN",
+  "id": "./index.html",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#131514",
+  "theme_color": "#c86648",
+  "categories": ["utilities", "education", "games"],
+  "icons": [
+    {
+      "src": "../game/pwa-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
+

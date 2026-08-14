@@ -1,0 +1,25 @@
+{
+  "name": "彩陶印痕：千年之誓",
+  "short_name": "彩陶印痕",
+  "description": "彩陶结社展览用离线视觉小说与实体展签探索体验。",
+  "lang": "zh-CN",
+  "id": "./index.html",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  },
+  "orientation": "any",
+  "background_color": "#0b0b10",
+  "theme_color": "#6d3028",
+  "categories": ["games", "education", "entertainment"],
+  "icons": [
+    {
+      "src": "./pwa-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
