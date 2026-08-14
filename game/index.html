@@ -2991,7 +2991,7 @@
         <div class="start-seal" aria-hidden="true"><span>陶</span></div>
         <h2 class="start-title">彩陶印痕</h2>
         <p class="start-subtitle">千年之誓</p>
-        <p class="start-line">一只金色的鸟，飞出黑暗中的陶罐。</p>
+        <p class="start-line">一只金色的鸟，从彩陶罐的纹样中飞出。</p>
         <button class="start-button" id="startButton" type="button">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
           <span>开始旅程</span>
@@ -13806,7 +13806,7 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
         "part": 0,
         "scene": "modern",
         "speaker": "馆长",
-        "text": "灯灭之后仍能看见纹样的人，已经不是旁观者。你听见的每一句话，都曾有人用一生来支付。",
+        "text": "能在展柜前看见移动纹样的人，已经不是旁观者。你听见的每一句话，都曾有人用一生来支付。",
         "portraits": {},
         "next": "m07"
       },
@@ -13815,7 +13815,7 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
         "part": 0,
         "scene": "modern",
         "speaker": "系统",
-        "text": "展馆灯光尽数熄灭。彩陶罐上的【金色鸟纹】骤然亮起，红土与松烟的气味穿过玻璃。",
+        "text": "讲解灯稳定地照着展柜。彩陶罐上的【金色鸟纹】却在玻璃之后缓缓游动，红土与松烟的气味穿过玻璃。",
         "choices": [
           {
             "label": "伸手触碰金色鸟纹",
@@ -13877,8 +13877,7 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
         "part": 0,
         "scene": "modern",
         "speaker": "旁白",
-        "text": "秦衡退开半步，一直隐在停电阴影里的馆长忽然按住你的肩。黑暗翻转，脚下的大理石化作尚带雨意的红土，小陶壶已经握在你手中。",
-        "transition": "black",
+        "text": "秦衡退开半步，展柜中的金色纹路忽然贴上玻璃。视野里的大理石化作尚带雨意的红土，小陶壶已经握在你手中。",
         "next": "m09"
       },
       {
@@ -15316,7 +15315,7 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
               "id": "pdf8ModernReturnLog",
               "kind": "memory",
               "title": "现实剧情 · 回到博物馆",
-              "text": "远古载体死亡后，意识回到停电后的现代展厅。"
+              "text": "远古载体死亡后，意识回到仍在开放的现代展厅。"
             }
           ]
         }
@@ -15690,8 +15689,7 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
         "part": 0,
         "scene": "museum",
         "speaker": "系统",
-        "text": "话音未落，展厅所有灯光同时熄灭。空调、投影与应急指示一并沉默，黑暗像水淹过人群。",
-        "transition": "black",
+        "text": "话音落下，鸟鱼纹彩陶罐的定向灯将光束收束在罐腹。展厅的空调、投影与导览仍在正常运作，只有金色纹路像被唤醒般缓缓游动。",
         "next": "solMuseumPowerFault"
       },
       {
@@ -15699,10 +15697,10 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
         "part": 0,
         "scene": "museum",
         "speaker": "旁白",
-        "text": "全馆断电。馆长要求游客留在原地，出口指示却在黑暗中翻转了方向；广播反复卡在同一句“请勿离开”，几名工作人员像被按下暂停般停在原地。你的手机与 AR 屏幕同时浮出雪花，鲲鹏鱼鸟纹从彩陶罐上游离出来，在噪点里伸展成陌生的金色轮廓。",
+        "text": "周围游客仍在正常参观，耳机导览与互动屏也照常运行。只有你面前的 AR 标识浮出细密金光，鲲鹏鱼鸟纹从彩陶罐上游离出来，在透明界面上伸展成陌生的金色轮廓。",
         "next": "e05",
         "gain": {
-          "sceneFlags": ["museumPowerFaultObserved"]
+          "sceneFlags": ["museumPatternAwakeningObserved"]
         }
       },
       {
@@ -15710,7 +15708,7 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
         "part": 0,
         "scene": "museum",
         "speaker": "馆长·秦衡",
-        "text": "电路出了问题，请各位留在原地，不要触碰展柜，也不要独自离开。维修完成后，讲解会继续。",
+        "text": "请各位与展柜保持安全距离。互动导览会在受邀者的设备上显示不同层级的内容，其余讲解照常继续。",
         "next": "e06"
       },
       {
@@ -15718,7 +15716,7 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
         "part": 0,
         "scene": "museum",
         "speaker": "旁白",
-        "text": "喧哗从四周升起。有人打开手机照明，有人抱怨行程被耽误。可在那些重叠声音下面，你听见了更古老的东西：陶片碎裂、燕群嘶鸣，还有骨刀擦过石台的尖响。",
+        "text": "人群继续围着别的展柜移动。有人低头听导览，有人讨论纹样来源；可在那些寻常声音下面，你听见了更古老的东西：陶片碎裂、燕群嘶鸣，还有骨刀擦过石台的尖响。",
         "next": "solModernMoonPromiseV1"
       },
       {
@@ -15727,11 +15725,11 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
         "scene": "museum",
         "speaker": "你",
         "thought": true,
-        "text": "黑暗里有一声燕鸣穿过展柜的玻璃，像从很远的火光中传来。你忽然明白，若现在转开目光，或许就再也找不到那道回声。",
+        "text": "耳机里有一声燕鸣穿过展柜的玻璃，像从很远的火光中传来。你忽然明白，若现在转开目光，或许就再也找不到那道回声。",
         "choices": [
           {
             "id": "solModernMoonPromiseChoiceV1",
-            "label": "对黑暗里的燕鸣说：我会记住你",
+            "label": "对耳机里的燕鸣说：我会记住你",
             "hint": "让一句回应穿过尚未开始的千年",
             "next": "e07",
             "effects": {
@@ -15778,7 +15776,7 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
             ]
           },
           {
-            "label": "凝视黑暗中的金色鸟纹",
+            "label": "凝视展柜中的金色鸟纹",
             "hint": "确认那道光是否真的飞离陶罐",
             "next": "e08b",
             "effects": {
@@ -18541,7 +18539,7 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
       },
       true: {
         number: "TRUE ENDING 04", title: "千年重逢", subtitle: "跨越时光的约定",
-        body: "小陶瓶没有让你死去，而是将意识送回停电的博物馆。展柜重新亮起，一名佩着燕子发卡的少女站在玻璃另一端。她没有远古的记忆，却在看见你时落下眼泪，轻声说出梦里练习过无数次的话：这一次，换我找到你。窗外雨停，月光照亮鸟身鱼尾的金色纹样。"
+        body: "小陶瓶没有让你死去，而是将意识送回仍在开放的博物馆。展柜前的定向灯映出一名佩着燕子发卡的少女，她没有远古的记忆，却在看见你时落下眼泪，轻声说出梦里练习过无数次的话：这一次，换我找到你。窗外雨停，月光照亮鸟身鱼尾的金色纹样。"
       },
       cycle: {
         number: "HIDDEN ENDING 05", title: "众欲覆辙", subtitle: "复仇再次淹没谷地",
@@ -18555,8 +18553,8 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
 
     const questCatalog = [
       {
-        id: "questMainPrologue", title: "展馆熄灯", type: "main", status: "active", part: 0,
-        description: "查明邀请函、停电与金色鸟纹之间的联系。", requirements: null,
+        id: "questMainPrologue", title: "展柜回响", type: "main", status: "active", part: 0,
+        description: "查明邀请函、彩陶结社与金色鸟纹之间的联系。", requirements: null,
         entryNode: "m00", returnNode: null, rewards: [], objective: "完成展馆调查并回应鲲鹏鱼鸟纹。"
       },
       {
@@ -18600,8 +18598,8 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
       { id: "fragmentJiGrassMatMemory", characterId: "ji", title: "同一张草席", text: "姬记得兄弟幼时睡过的草席，也因此比任何人都更早看穿澜以冷酷掩饰的恐惧。", sourceNode: "l05", sourceHotspot: null, unlockCondition: null },
       { id: "fragmentJiaRestlessSwallows", characterId: "jia", title: "不肯落下的燕群", text: "燕群仍在筑巢，却缩短衔泥的时间并持续鸣叫。葭第一次确认，鸟类正在为尚未到来的灾难寻找退路。", sourceNode: "j01", sourceHotspot: null, unlockCondition: null },
       { id: "fragmentGrandmotherLastCounsel", characterId: "grandmother", title: "留给活人的明天", text: "姥姥没有否认复仇的理由，只提醒澜：把姬带回家，不等于把他继续带进仇恨。", sourceNode: "a10", sourceHotspot: null, unlockCondition: null },
-      { id: "fragmentQinBirdOrFlame", characterId: "qin", title: "鸟，还是一场火", text: "秦衡能准确追问停电时出现的两种幻象，说明他早已知道展柜会向特定受邀者显露什么。", sourceNode: "m08b", sourceHotspot: null, unlockCondition: null },
-      { id: "fragmentDirectorNoBystander", characterId: "director", title: "旁观者的终点", text: "馆长认定能在黑暗中看见纹样的人已经进入历史，听见的每句话都附着真实生命支付的代价。", sourceNode: "m06", sourceHotspot: null, unlockCondition: null },
+      { id: "fragmentQinBirdOrFlame", characterId: "qin", title: "鸟，还是一场火", text: "秦衡能准确追问展柜前出现的两种幻象，说明他早已知道展柜会向特定受邀者显露什么。", sourceNode: "m08b", sourceHotspot: null, unlockCondition: null },
+      { id: "fragmentDirectorNoBystander", characterId: "director", title: "旁观者的终点", text: "馆长认定能看见移动纹样的人已经进入历史，听见的每句话都附着真实生命支付的代价。", sourceNode: "m06", sourceHotspot: null, unlockCondition: null },
       { id: "fragmentLightGirlFirstEcho", characterId: "lightgirl", title: "迟到的相认", text: "玻璃倒影中的少女先认出了玩家。她没有说出名字，只确认这场跨越千年的相见并非第一次。", sourceNode: "m03", sourceHotspot: null, unlockCondition: null },
       { id: "fragmentChildrenOldFriendQuestion", characterId: "children", title: "旧友之问", text: "孩子从鸟身鱼尾的旧神话里听出两族曾经并肩生活，也问出了成年人不愿再回答的问题。", sourceNode: "daily3", sourceHotspot: null, unlockCondition: null },
       { id: "fragmentLingMeasuredAlliance", characterId: "ling", title: "量过的盟约", text: "棂把南坡通道、守田借口与肥沃耕地写进同一笔交换。她提出的不是援助，而是一场已量好代价的联盟。", sourceNode: "lr00", sourceHotspot: null, unlockCondition: null },
@@ -18619,7 +18617,7 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
     const characterFragmentById = new Map(characterFragmentCatalog.map(fragment => [fragment.id, fragment]));
 
     const cgCatalog = [
-      { id: "cgGoldenBirdAwakens", title: "金鸟离罐", description: "停电展厅中，金色鸟纹从彩陶罐腹振翅而起。", requirements: { evidence: ["goldenBirdMark"] } },
+      { id: "cgGoldenBirdAwakens", title: "金鸟离罐", description: "定向灯下，金色鸟纹从彩陶罐腹振翅而起。", requirements: { evidence: ["goldenBirdMark"] } },
       { id: "cgKilnBrothers", title: "窑夜兄弟", description: "姬在余火前叫出那声被隐藏十年的“哥哥”。", requirements: { evidence: ["jiBoneToken"] } },
       { id: "cgJiaOmen", title: "燕巢神谕", description: "战争与洪水的碎片同时映入葭的眼中。", requirements: { evidence: ["warOmen", "floodOmen"] } },
       { id: "cgCrackedBasin", title: "鸟纹断裂", description: "重制后的祭器仍在落上祭台的一刻裂开。", requirements: { evidence: ["crackedBasinRecord"] } },
@@ -19067,7 +19065,7 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
       {
         "id": "goldenBirdMark",
         "name": "金色鸟纹",
-        "description": "停电后仍自行移动的纹样，触发第一枚纹魂。",
+        "description": "定向灯下仍自行移动的纹样，触发第一枚纹魂。",
         "category": "博物馆线索",
         "endingUse": "支撑历史之眼与真结局。"
       },
@@ -19448,9 +19446,9 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
       },
       {
         "id": "museumOmen",
-        "title": "黑暗中的纹样",
+        "title": "展柜中的纹样",
         "locationId": "museum-omen",
-        "prompt": "找出黑暗中唯一仍在移动的东西。",
+        "prompt": "找出玻璃后唯一仍在移动的东西。",
         "required": [
           "goldenBirdMarkHotspot"
         ],
@@ -20941,6 +20939,8 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
     const STORAGE_VERSION = 11;
     const PROFILE_VERSION = 4;
     const SLOT_PREFIX = "caitao-oath.v1.slot.";
+    // Slots 1-3 remain unchanged; slots 4-9 are additional local save records.
+    const SAVE_SLOT_IDS = Object.freeze(Array.from({ length: 9 }, (_, index) => index + 1));
     const PROFILE_KEY = "caitao-oath.v1.profile";
     const MAX_TIMELINE = 180;
 
@@ -20950,7 +20950,7 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
       { speaker: "姥姥", name: "姥姥", role: "鸟部族现任祭司 · 年岁无考", portrait: "grandmother", description: "葭唯一的家人，也是鸟部族面对风雨时最后的屏障。她守住旧礼，却不以神意替活人逃避选择。" },
       { speaker: "姬", name: "姬", role: "鱼部族战俘 · 19岁", portrait: "ji", description: "19岁的鱼部族战俘，九岁时被鸟部族俘获。沉默寡言、性格孤僻，负责看守陶窑、打杂与农耕苦力；他也是澜必须隐藏的亲弟弟。" },
       { speaker: "馆长·秦衡", name: "秦衡", role: "馆长", portrait: "curator", description: "庙底沟博物馆馆长，负责本次彩陶闭馆特展。他熟悉每一道纹样，却没有说明展品为何被安排在今夜亮相。" },
-      { speaker: "馆长", name: "馆长", role: "彩陶结社引路人", portrait: "director", description: "停电后出现在展柜旁的引路人。他相信看见历史的人，再也无法只做旁观者。" },
+      { speaker: "馆长", name: "馆长", role: "彩陶结社引路人", portrait: "director", description: "在展柜旁出现的引路人。他相信看见历史的人，再也无法只做旁观者。" },
       { speaker: "光之少女", name: "光之少女", role: "跨越千年的回声", portrait: "lightgirl", description: "在现代展馆的月光中出现的少女。她与远古的葭共享某种无法言明的回声。" },
       { speaker: "孩子", name: "鸟部族孩子", role: "窑火旁的新一代", portrait: "children", description: "围在姥姥身边听神话的少年与少女。他们让战争之外的日常生活仍有可被守护的形状。" },
       { speaker: "棂", name: "棂", role: "粟部族头领 · 女 · 35岁", portrait: "millet", description: "思虑周全，手段凌厉。前任头领骤然离世后她仓促接位，声望尚未稳固，迫切需要一场胜利来提高威望。" },
@@ -21800,8 +21800,8 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
     }
 
     function renderSlotLists() {
-      ui.saveSlots.replaceChildren(...[1, 2, 3].map(slot => createSlotCard(slot, "save")));
-      ui.loadSlots.replaceChildren(...[1, 2, 3].map(slot => createSlotCard(slot, "load")));
+      ui.saveSlots.replaceChildren(...SAVE_SLOT_IDS.map(slot => createSlotCard(slot, "save")));
+      ui.loadSlots.replaceChildren(...SAVE_SLOT_IDS.map(slot => createSlotCard(slot, "load")));
     }
 
     function renderGallery() {
@@ -22987,9 +22987,9 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
       const fragment = document.createDocumentFragment();
       if (tab === "save" || tab === "load") {
         const mode = tab === "save" ? "save" : "load";
-        fragment.append(moduleIntro(mode === "save" ? "存档" : "读档", mode === "save" ? "将当前剧情、选择印记与回退记录保存到陶印槽位。" : "读取时会恢复当前周目状态与模块位置。", "3 槽"));
+        fragment.append(moduleIntro(mode === "save" ? "存档" : "读档", mode === "save" ? "将当前剧情、选择印记与回退记录保存到陶印槽位。" : "读取时会恢复当前周目状态与模块位置。", `${SAVE_SLOT_IDS.length} 槽`));
         const grid = moduleElement("div", "module-grid");
-        [1, 2, 3].forEach(slot => grid.appendChild(createSlotCard(slot, mode)));
+        SAVE_SLOT_IDS.forEach(slot => grid.appendChild(createSlotCard(slot, mode)));
         fragment.appendChild(grid);
       } else if (tab === "gallery") {
         const endings = moduleElement("section"); endings.appendChild(moduleElement("h3", "module-section-title", "结局图鉴"));
