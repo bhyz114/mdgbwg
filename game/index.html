@@ -758,6 +758,34 @@
       #majorSavePromptDialog[open]:not(.is-leaving) .confirm-actions button { animation: none; }
     }
 
+    /* Re-saving a used slot gets its own explicit, non-recoverable overwrite warning. */
+    #overwriteSaveDialog {
+      width: min(456px, calc(100vw - 32px)); overflow: hidden;
+      border-color: rgba(212, 128, 93, .78); border-radius: 5px;
+      background: linear-gradient(145deg, #2a1919 0%, #191115 70%, #251517 100%);
+      box-shadow: 0 28px 92px rgba(0, 0, 0, .78), 0 0 0 1px rgba(255, 180, 142, .08) inset;
+    }
+    #overwriteSaveDialog .confirm-body { padding: 31px 30px 28px; }
+    #overwriteSaveDialog .confirm-body::before {
+      content: "!"; display: grid; place-items: center; width: 24px; height: 24px; margin-bottom: 14px;
+      border: 1px solid rgba(244, 166, 124, .85); border-radius: 50%;
+      color: #ffd8bf; font: 800 14px/1 Arial, sans-serif;
+    }
+    #overwriteSaveDialog .confirm-body h2 { letter-spacing: .06em; }
+    #overwriteSaveDialog .confirm-warning {
+      margin: 13px 0 0; color: #f3b69b; font-size: 12px; line-height: 1.65;
+    }
+    #overwriteSaveDialog .confirm-actions button {
+      min-height: 52px; transition: background .2s ease, color .2s ease, transform .2s ease;
+    }
+    #overwriteSaveDialog .confirm-actions button:last-child {
+      background: rgba(143, 55, 38, .62); color: #ffe3d3;
+    }
+    #overwriteSaveDialog .confirm-actions button:hover { transform: translateY(-1px); }
+    #overwriteSaveDialog .confirm-actions button:focus-visible {
+      outline: 2px solid rgba(255, 211, 178, .92); outline-offset: -4px;
+    }
+
     @media (max-width: 760px) {
       .game { min-height: 460px; }
       .topbar { height: 62px; padding-left: 14px; padding-right: 14px; }
@@ -3418,6 +3446,14 @@
       <p id="majorSavePromptText">这项选择会显著改变后续剧情。是否先把此刻刻入陶印？</p>
     </div>
     <div class="confirm-actions"><button id="majorSaveContinue" type="button">不保存，继续</button><button id="majorSaveOpen" type="button">前往存档</button></div>
+  </dialog>
+  <dialog id="overwriteSaveDialog" aria-labelledby="overwriteSaveTitle" aria-describedby="overwriteSaveText overwriteSaveWarning">
+    <div class="confirm-body">
+      <h2 id="overwriteSaveTitle">覆盖已有陶印？</h2>
+      <p id="overwriteSaveText">陶印 01 已经保存过故事。</p>
+      <p class="confirm-warning" id="overwriteSaveWarning">警示：确认后，原有存档将被永久覆盖，已覆盖的存档不能找回。</p>
+    </div>
+    <div class="confirm-actions"><button id="cancelOverwriteSave" type="button">取消</button><button id="confirmOverwriteSave" type="button">确认覆盖</button></div>
   </dialog>
 
 
@@ -20803,7 +20839,9 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
       characterIntroAge: document.getElementById("characterIntroAge"), characterIntroIdentity: document.getElementById("characterIntroIdentity"),
       characterIntroDescription: document.getElementById("characterIntroDescription"),
       majorSavePromptDialog: document.getElementById("majorSavePromptDialog"), majorSavePromptText: document.getElementById("majorSavePromptText"),
-      majorSaveContinue: document.getElementById("majorSaveContinue"), majorSaveOpen: document.getElementById("majorSaveOpen")
+      majorSaveContinue: document.getElementById("majorSaveContinue"), majorSaveOpen: document.getElementById("majorSaveOpen"),
+      overwriteSaveDialog: document.getElementById("overwriteSaveDialog"), overwriteSaveText: document.getElementById("overwriteSaveText"),
+      cancelOverwriteSave: document.getElementById("cancelOverwriteSave"), confirmOverwriteSave: document.getElementById("confirmOverwriteSave")
     };
 
     ui.inventoryQuick = document.getElementById("inventoryQuickButton");
@@ -20854,6 +20892,7 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
     let pendingMajorSaveChoice = null;
     let pendingMajorSaveNodeId = null;
     let majorSavePromptCloseTimer = 0;
+    let pendingOverwriteSaveSlot = null;
     let renderEpoch = 0;
     const memoryStorage = new Map();
     const STORAGE_VERSION = 11;
@@ -21422,7 +21461,7 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
     }
 
     function isModalOpen() {
-      return ui.restartDialog.open || ui.majorSavePromptDialog.open || ui.menuDialog.open || ui.historyDialog.open || !ui.moduleOverlay.hidden;
+      return ui.restartDialog.open || ui.majorSavePromptDialog.open || ui.overwriteSaveDialog.open || ui.menuDialog.open || ui.historyDialog.open || !ui.moduleOverlay.hidden;
     }
 
     function showSystemToast(message, duration = 2200) {
@@ -21636,8 +21675,19 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
       }
     }
 
-    function saveToSlot(slot) {
-      if (state.ended) { showSystemToast("结局画面不可存档，请重新开始后再保存"); return; }
+    function saveToSlot(slot, { confirmed = false } = {}) {
+      const numericSlot = Number(slot);
+      if (!SAVE_SLOT_IDS.includes(numericSlot)) { showSystemToast("无效的陶印槽位"); return false; }
+      if (state.ended) { showSystemToast("结局画面不可存档，请重新开始后再保存"); return false; }
+      const existing = readSlot(numericSlot);
+      if (existing && !confirmed) {
+        pendingOverwriteSaveSlot = numericSlot;
+        ui.overwriteSaveText.textContent = `陶印 ${String(numericSlot).padStart(2, "0")} 已经保存过故事。`;
+        if (!ui.overwriteSaveDialog.open) ui.overwriteSaveDialog.showModal();
+        window.requestAnimationFrame(() => ui.cancelOverwriteSave.focus({ preventScroll: true }));
+        return false;
+      }
+      if (pendingOverwriteSaveSlot === numericSlot) pendingOverwriteSaveSlot = null;
       const acknowledgedMajorSave = pendingMajorSaveNodeId === state.current && MAJOR_SAVE_PROMPT_NODE_IDS.has(state.current);
       if (acknowledgedMajorSave) {
         markMajorSavePrompted(state.current);
@@ -21650,10 +21700,24 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
         timeline,
         backlog
       };
-      const persistent = safeStorageSet(slotKey(slot), JSON.stringify(payload));
+      const persistent = safeStorageSet(slotKey(numericSlot), JSON.stringify(payload));
       renderSlotLists();
       if (!ui.moduleOverlay.hidden && state.activeMode === "profile") renderActiveModule();
-      showSystemToast(persistent ? `已保存到陶印 ${slot}${acknowledgedMajorSave ? "，临界抉择已刻入" : ""}` : `已保存到陶印 ${slot}，关闭页面后可能失效`);
+      showSystemToast(persistent ? `已保存到陶印 ${numericSlot}${acknowledgedMajorSave ? "，临界抉择已刻入" : ""}` : `已保存到陶印 ${numericSlot}，关闭页面后可能失效`);
+      return persistent;
+    }
+
+    function cancelOverwriteSavePrompt() {
+      pendingOverwriteSaveSlot = null;
+      if (ui.overwriteSaveDialog.open) ui.overwriteSaveDialog.close();
+    }
+
+    function confirmOverwriteSave() {
+      const slot = pendingOverwriteSaveSlot;
+      if (!slot || !ui.overwriteSaveDialog.open) { cancelOverwriteSavePrompt(); return; }
+      pendingOverwriteSaveSlot = null;
+      ui.overwriteSaveDialog.close();
+      saveToSlot(slot, { confirmed: true });
     }
 
     function loadFromSlot(slot) {
@@ -21709,7 +21773,7 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
         time.textContent = formatSaveTime(saved.savedAt);
       } else {
         chapter.textContent = "尚未刻下故事";
-        line.textContent = mode === "save" ? "可将此刻的剧情、选择印记与回退记录保存于此。" : "这个槽位目前没有可读取的记录。";
+        line.textContent = mode === "save" ? "可将此刻的剧情、选择印记与回退记录保存于此。再次保存会先询问是否覆盖。" : "这个槽位目前没有可读取的记录。";
         time.textContent = "空白陶印";
       }
       action.textContent = mode === "save" ? (saved ? "覆盖此陶印" : "保存到此处") : "读取此陶印";
@@ -25710,6 +25774,15 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
     });
     ui.majorSavePromptDialog.addEventListener("click", event => {
       if (event.target === ui.majorSavePromptDialog && !majorSavePromptCloseTimer) abandonMajorSavePrompt();
+    });
+    ui.cancelOverwriteSave.addEventListener("click", cancelOverwriteSavePrompt);
+    ui.confirmOverwriteSave.addEventListener("click", confirmOverwriteSave);
+    ui.overwriteSaveDialog.addEventListener("cancel", event => {
+      event.preventDefault();
+      cancelOverwriteSavePrompt();
+    });
+    ui.overwriteSaveDialog.addEventListener("click", event => {
+      if (event.target === ui.overwriteSaveDialog) cancelOverwriteSavePrompt();
     });
     ui.endingContinueWu.addEventListener("click", continueWuLine);
     ui.endingRestart.addEventListener("click", restartGame);
