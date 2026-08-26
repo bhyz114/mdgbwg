@@ -1,5 +1,5 @@
 const CACHE_PREFIX = "caitao-oath-exhibit-";
-const CACHE_NAME = `${CACHE_PREFIX}v28`;
+const CACHE_NAME = `${CACHE_PREFIX}v31`;
 const APP_SHELL = ["./", "./index.html", "./manifest.webmanifest", "./pwa-icon.svg"];
 
 self.addEventListener("install", event => {
@@ -49,3 +49,6 @@ self.addEventListener("fetch", event => {
       }))
   );
 });
+
+
+
